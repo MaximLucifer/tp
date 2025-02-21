@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center">Products</h2>
+<div class="row">
+    {% for product in products %}
+    <div class="col-12 col-sm-6 col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">Price: ${{ product.price }}</p>
+                <p class="card-text">Stock: <span id="stock-{{ product.id }}">{{ product.stock }}</span></p>
+                <div class="d-flex justify-content-center mb-2">
+                    <button class="btn btn-primary me-2" onclick="updateStock({{ product.id }}, 1)">+</button>
+                    <button class="btn btn-danger" onclick="updateStock({{ product.id }}, -1)">-</button>
+                </div>
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">Добавить в корзину</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function updateStock(productId, change) {
+        let stockElement = document.getElementById(`stock-${productId}`);
+        let currentStock = parseInt(stockElement.innerText);
+        if (currentStock + change >= 0) {
+            stockElement.innerText = currentStock + change;
+        }
+    }
+</script>
+{% endblock %}
